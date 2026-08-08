@@ -4,7 +4,22 @@ This repository contains the capstone project for an AI Frontend Engineering cou
 
 ## Overview
 
-<!-- TODO: Add project overview, goals, and key features -->
+**Flyrank** is the capstone application for an AI Frontend Engineering course — a frontend project built with AI-assisted development workflows from planning through implementation and review.
+
+### Goals
+
+- Deliver a modern, accessible web application with a clear user-facing purpose
+- Use AI tools deliberately in the dev workflow (scaffolding, iteration, code review)
+- Document architecture decisions, trade-offs, and lessons learned
+
+### Scope
+
+- Frontend application (framework and feature set **TBD**)
+- README, setup docs, and runnable dev environment once the stack is chosen
+
+### Status
+
+**Early setup** — repository scaffolding is in place; tech stack and product requirements are still being defined.
 
 ## Tech Stack
 
