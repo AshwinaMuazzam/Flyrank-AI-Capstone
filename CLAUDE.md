@@ -29,3 +29,11 @@ When the stack is finalized, update this file with the confirmed frameworks, lib
 - **Do not commit secrets** (`.env`, API keys, credentials).
 - **Do not create commits or push** unless explicitly asked.
 - When unsure about project direction or stack choices, ask the user rather than guessing.
+
+## Rules Learned From the Prompting Drill (FE-02)
+
+1. **Forms use react-hook-form + zod for validation — never plain useState with manual if-checks.** The vague-prompt round used ad hoc useState validation with only 2 checks total and no schema; it looked done but was unverifiable. Any form component in this repo must use react-hook-form + zod going forward.
+
+2. **Every input requires an associated `<label>` and, for invalid fields, `aria-describedby` pointing to the error message.** The careful round implemented both; the careless round had labels but no `aria-describedby`, so screen reader users would not know which field failed validation.
+
+3. **No component is "done" until its tests exist and pass.** Always instruct: "write it, then write tests and run them, then fix and re-run until they pass." The precise round's own zod schema had a real bug (incompatible `required_error` syntax for the installed zod version) that only surfaced because tests were actually run — without that step, the bug would have shipped silently.
