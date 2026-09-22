@@ -1,0 +1,112 @@
+.app {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: system-ui, sans-serif;
+  color: #e0e0e0;
+  background: #1a1a1a;
+  min-height: 100vh;
+}
+
+.app h1 {
+  line-height: 1.3;
+}
+
+.app__intro {
+  color: #555;
+}
+
+section {
+  margin: 2rem 0;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-dialog {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 90%;
+  color: #111;
+}
+
+.modal-title {
+  margin-top: 0;
+}
+
+.modal-body input,
+.modal-body button {
+  display: block;
+  margin: 0.5rem 0;
+}
+
+.modal-close-btn {
+  margin-top: 1rem;
+}
+
+/* Tabs */
+.tabs__list {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.tabs__tab {
+  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
+  border-bottom: none;
+  background: none;
+}
+
+.tabs__tab.is-active {
+  border-color: #ccc;
+  background: #fff;
+  color: #111;
+  font-weight: 600;
+}
+
+.tabs__panel {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+/* Disclosure */
+.disclosure__trigger {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+}
+
+.disclosure__icon {
+  transition: transform 0.15s ease;
+  display: inline-block;
+}
+
+.disclosure__icon.is-open {
+  transform: rotate(90deg);
+}
+
+.disclosure__content {
+  padding: 0.5rem 0 0.5rem 1.5rem;
+}
