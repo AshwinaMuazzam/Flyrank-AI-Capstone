@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Send button — state choreography</title>
+<style>
+  :root {
+    --bg: #16161d;
+    --surface: #1e1e28;
+    --border: #32323f;
+    --text: #e8e6f0;
+    --text-dim: #8f8ca3;
+
+    --accent: #6c5ce7;
+    --accent-hover: #7d6df0;
+    --accent-active: #5c4bd6;
+    --success: #34c98d;
+    --error: #e0575c;
+
+    --dur-fast: 140ms;
+    --dur-base: 220ms;
+    --dur-slow: 420ms;
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f4f3f8;
+      --surface: #ffffff;
+      --border: #dedbe8;
+      --text: #1c1a29;
+      --text-dim: #6b6880;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    padding-top: max(1.5rem, env(safe-area-inset-top));
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+
+  .card {
+    width: 100%;
+    max-width: 440px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.25rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .card__eyebrow {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .card__title {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin: 0.25rem 0 0;
+    letter-spacing: -0.01em;
+  }
+
+  .fake-input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.6rem 0.6rem 0.6rem 1rem;
+  }
+
+  .fake-input-row input {
+    flex: 1;
+    min-width: 0;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+    font-family: inherit;
+  }
+
+  .fake-input-row input::placeholder {
+    color: var(--text-dim);
+  }
+
+  .send-btn {
+    position: relative;
+    width: 188px;
+    height: 48px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 12px;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition:
+      background-color var(--dur-base) var(--ease-standard),
+      transform var(--dur-fast) var(--ease-standard),
+      box-shadow var(--dur-fast) var(--ease-standard);
+  }
+
+  .send-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+  }
+
+  .send-btn:active {
+    transform: translateY(0) scale(0.97);
+    transition-duration: 60ms;
+  }
+
+  .send-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent-hover);
+  }
+
+  .send-btn:disabled {
+    cursor: default;
+  }
+
+  .send-btn.is-error {
+    background: var(--error);
+  }
+  .send-btn.is-error:hover {
+    background: #e77579;
+  }
+
+  .send-btn.is-success {
+    background: var(--success);
+  }
+
+  .send-btn.is-shaking {
+    animation: shake 420ms var(--ease-standard);
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(2px); }
+  }
+
+  .send-btn__layers {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .send-btn__layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    opacity: 0;
+    transform: translateY(6px) scale(0.94);
+    transition:
+      opacity var(--dur-base) var(--ease-standard),
+      transform var(--dur-base) var(--ease-standard);
+    pointer-events: none;
+  }
+
+  .send-btn__layer.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition-timing-function: var(--ease-out-back);
+  }
+
+  .send-btn__icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .send-btn__spinner {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2.5px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    animation: spin 700ms linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .harness {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .harness__label {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+
+  .harness__options {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .harness__options button {
+    font: inherit;
+    font-size: 0.78rem;
+    background: var(--bg);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.35rem 0.6rem;
+    cursor: pointer;
+    transition: color var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+  }
+
+  .harness__options button.is-active {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+
+  .harness__options button:focus-visible {
+    outline: 2px solid var(--accent-hover);
+    outline-offset: 2px;
+  }
+
+  .status-line {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    min-height: 1.2em;
+  }
+
+  .notes {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+    border-top: 1px solid var(--border);
+    padding-top: 1.25rem;
+    margin: 0;
+  }
+
+  .notes strong {
+    color: var(--text);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .send-btn,
+    .send-btn__layer,
+    .harness__options button {
+      transition-duration: 1ms !important;
+    }
+    .send-btn.is-shaking {
+      animation: none !important;
+    }
+    .send-btn__spinner {
+      animation-duration: 900ms;
+    }
+    .send-btn__layer {
+      transform: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="card">
+    <div>
+      <p class="card__eyebrow">Buttons with a brain</p>
+      <h1 class="card__title">Send message</h1>
+    </div>
+
+    <div class="fake-input-row">
+      <input type="text" placeholder="Ask about your ARIA patterns…" aria-label="Message input (demo only, not wired to anything)" />
+      <button type="button" class="send-btn" id="sendBtn">
+        <span class="send-btn__layers">
+          <span class="send-btn__layer is-visible" data-layer="idle">
+            <svg class="send-btn__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 12L20 4L14 12L20 20L4 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            <span data-label>Send message</span>
+          </span>
+
+          <span class="send-btn__layer" data-layer="loading">
+            <span class="send-btn__spinner" aria-hidden="true"></span>
+            <span>Sending…</span>
+          </span>
+
+          <span class="send-btn__layer" data-layer="success">
+            <svg class="send-btn__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 12.5L9.5 18L20 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Sent</span>
+          </span>
+
+          <span class="send-btn__layer" data-layer="error">
+            <svg class="send-btn__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 4V13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="12" cy="17.5" r="1.4" fill="currentColor"/>
+            </svg>
+            <span>Retry</span>
+          </span>
+        </span>
+      </button>
+    </div>
+
+    <div class="harness">
+      <span class="harness__label">Simulate result:</span>
+      <div class="harness__options" role="group" aria-label="Simulated network result">
+        <button type="button" data-mode="random" class="is-active">Random (20% fail)</button>
+        <button type="button" data-mode="success">Force success</button>
+        <button type="button" data-mode="error">Force error</button>
+      </div>
+    </div>
+
+    <p class="status-line" id="statusLine" role="status">Idle. Click the button to test it.</p>
+
+    <p class="notes">
+      <strong>Timing:</strong> content swaps use 220ms with an ease-out-back curve, quick enough to feel responsive, loose enough to read as a deliberate pop rather than a snap. Hover/press use 140ms linear-ish easing — short, since they respond to continuous pointer movement rather than a discrete event. The error shake runs once at 420ms and is fully skipped under <code>prefers-reduced-motion</code>, but the color change and "Retry" label still communicate the failure without motion.
+    </p>
+  </div>
+
+  <script>
+    const btn = document.getElementById('sendBtn');
+    const statusLine = document.getElementById('statusLine');
+    const layers = btn.querySelectorAll('.send-btn__layer');
+    const modeButtons = document.querySelectorAll('.harness__options button');
+
+    let mode = 'random';
+    let state = 'idle';
+    let pendingTimeout = null;
+
+    function setLayer(name) {
+      layers.forEach((layer) => {
+        layer.classList.toggle('is-visible', layer.dataset.layer === name);
+      });
+    }
+
+    function setButtonState(next) {
+      state = next;
+      btn.classList.remove('is-error', 'is-success');
+      if (next === 'error') btn.classList.add('is-error');
+      if (next === 'success') btn.classList.add('is-success');
+
+      const layerForState = {
+        idle: 'idle',
+        loading: 'loading',
+        success: 'success',
+        error: 'error',
+      };
+      setLayer(layerForState[next]);
+
+      btn.disabled = next === 'loading';
+    }
+
+    function announce(text) {
+      statusLine.textContent = text;
+    }
+
+    modeButtons.forEach((mbtn) => {
+      mbtn.addEventListener('click', () => {
+        mode = mbtn.dataset.mode;
+        modeButtons.forEach((b) => b.classList.toggle('is-active', b === mbtn));
+      });
+    });
+
+    btn.addEventListener('click', () => {
+      if (state === 'loading') return;
+
+      if (pendingTimeout) {
+        clearTimeout(pendingTimeout);
+        pendingTimeout = null;
+      }
+      btn.classList.remove('is-shaking');
+
+      setButtonState('loading');
+      announce('Sending message…');
+
+      const delay = 700 + Math.random() * 900;
+      const willFail = mode === 'error' ? true : mode === 'success' ? false : Math.random() < 0.2;
+
+      pendingTimeout = setTimeout(() => {
+        if (willFail) {
+          setButtonState('error');
+          announce('Send failed. Click Retry to try again.');
+          void btn.offsetWidth;
+          btn.classList.add('is-shaking');
+          btn.addEventListener('animationend', () => btn.classList.remove('is-shaking'), { once: true });
+        } else {
+          setButtonState('success');
+          announce('Message sent.');
+          pendingTimeout = setTimeout(() => {
+            setButtonState('idle');
+            announce('Idle. Click the button to test it.');
+          }, 1300);
+        }
+      }, delay);
+    });
+  </script>
+</body>
+</html>
