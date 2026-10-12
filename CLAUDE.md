@@ -4,9 +4,9 @@ Guidance for AI coding assistants working in this repository.
 
 ## Project Stack
 
-The tech stack is **to be decided**. It will likely include a modern frontend framework such as **React**, **Next.js**, or a similar option. Do not assume a specific framework until it is chosen and documented in `README.md`.
-
-When the stack is finalized, update this file with the confirmed frameworks, libraries, and tooling.
+**React 19 + Vite**, plain JavaScript, Vitest + React Testing Library for tests, deployed on Vercel.
+Movie data: OMDb API. AI: Gemini API (free tier) called only from the serverless function in `api/` (never from the browser).
+Keep API keys in `.env` / Vercel env vars; only `VITE_`-prefixed vars reach the browser, so the Gemini key must never use that prefix.
 
 ## Coding Conventions
 
