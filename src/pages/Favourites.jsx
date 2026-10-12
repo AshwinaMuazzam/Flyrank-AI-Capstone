@@ -5,6 +5,7 @@ export default function Favourites({ favourites, onToggleFavourite }) {
   if (favourites.length === 0) {
     return (
       <div className="home-page">
+        <h1 className="home-page__heading">Your favourites</h1>
         <p className="home-page__status">
           You haven't added any favourites yet. Go find something good to watch!
         </p>
@@ -14,6 +15,7 @@ export default function Favourites({ favourites, onToggleFavourite }) {
 
   return (
     <div className="home-page">
+      <h1 className="home-page__heading">Your favourites</h1>
       <div className="home-page__grid">
         {favourites.map((movie) => (
           <MovieCard

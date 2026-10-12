@@ -76,3 +76,30 @@ export async function getMovieDetails(imdbID) {
     return { movie: null, error: err.message || 'Something went wrong.' };
   }
 }
+
+/**
+ * Look up one movie by exact title (and optional year). Used to verify that a
+ * title suggested by the AI really exists before showing it to the user.
+ * @returns {Promise<{movie: object|null, error: string|null}>}
+ */
+export async function getMovieByTitle(title, year) {
+  if (!API_KEY) {
+    return { movie: null, error: 'Missing OMDb API key.' };
+  }
+
+  const yearParam = year ? `&y=${year}` : '';
+  const url = `${BASE_URL}?apikey=${API_KEY}&t=${encodeURIComponent(title)}${yearParam}`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Network error: ${response.status}`);
+
+    const data = await response.json();
+    if (data.Response === 'False') {
+      return { movie: null, error: data.Error || 'Movie not found.' };
+    }
+    return { movie: data, error: null };
+  } catch (err) {
+    return { movie: null, error: err.message || 'Something went wrong.' };
+  }
+}

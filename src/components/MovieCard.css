@@ -62,7 +62,14 @@
 }
 
 .movie-card__fav-btn.is-active {
-  background: #7a5cff;
-  border-color: #7a5cff;
+  background: #6a4cef;
+  border-color: #6a4cef;
   color: #fff;
+}
+
+.movie-card__reason {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #c8c8dc;
+  margin: 0;
 }

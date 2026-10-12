@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import './SearchBar.css';
 
-export default function SearchBar({ onSearch, initialValue = '' }) {
+export default function SearchBar({
+  onSearch,
+  initialValue = '',
+  id = 'movie-search',
+  label = 'Search for a movie',
+  placeholder = 'Search for a movie, e.g. Inception',
+  buttonLabel = 'Search',
+}) {
   const [value, setValue] = useState(initialValue);
 
   function handleSubmit(e) {
@@ -11,19 +18,19 @@ export default function SearchBar({ onSearch, initialValue = '' }) {
 
   return (
     <form className="search-bar" onSubmit={handleSubmit} role="search">
-      <label htmlFor="movie-search" className="sr-only">
-        Search for a movie
+      <label htmlFor={id} className="sr-only">
+        {label}
       </label>
       <input
-        id="movie-search"
+        id={id}
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Search for a movie, e.g. Inception"
+        placeholder={placeholder}
         className="search-bar__input"
       />
       <button type="submit" className="search-bar__button">
-        Search
+        {buttonLabel}
       </button>
     </form>
   );

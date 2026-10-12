@@ -19,3 +19,44 @@
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 1.25rem;
 }
+
+.home-page__heading {
+  text-align: center;
+  font-size: 1.6rem;
+  margin: 0 0 1rem;
+}
+
+.home-page__status--notice {
+  color: #ffd479;
+}
+
+.home-page__modes {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.home-page__mode {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 1px solid #4a4a6a;
+  background: transparent;
+  color: #e0e0f0;
+  cursor: pointer;
+}
+
+.home-page__mode:hover {
+  border-color: #8f8fff;
+}
+
+.home-page__mode:focus-visible {
+  outline: 2px solid #8f8fff;
+  outline-offset: 2px;
+}
+
+.home-page__mode.is-active {
+  background: #6a4cef;
+  border-color: #6a4cef;
+  color: #fff;
+}
