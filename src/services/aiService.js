@@ -27,6 +27,28 @@ export async function getRecommendations(query) {
   }
 }
 
+const normalise = (t) =>
+  String(t)
+    .toLowerCase()
+    .replace(/^the\s+/, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+
+/**
+ * OMDb's title lookup returns its "best guess", which can be a different
+ * work (e.g. a TV episode that merely contains the title). Only accept a match
+ * when the returned title is the requested one, or the requested title plus a
+ * subtitle after a colon.
+ */
+export function titlesMatch(requested, returned) {
+  const a = normalise(requested);
+  const b = normalise(returned);
+  if (!a || !b) return false;
+  if (a === b) return true;
+  const colon = String(returned).toLowerCase().replace(/^the\s+/, '');
+  return colon.startsWith(`${String(requested).toLowerCase().replace(/^the\s+/, '')}:`);
+}
+
 /**
  * Full AI search: get suggestions from the LLM, then verify each one against
  * OMDb. Titles OMDb can't find (possible hallucinations) are silently dropped.
@@ -39,7 +61,7 @@ export async function aiSearchMovies(query) {
   const lookups = await Promise.all(
     recommendations.map(async (rec) => {
       const { movie } = await getMovieByTitle(rec.title, rec.year);
-      if (!movie) return null;
+      if (!movie || !titlesMatch(rec.title, movie.Title)) return null;
       return {
         imdbID: movie.imdbID,
         Title: movie.Title,
