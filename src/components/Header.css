@@ -1,0 +1,41 @@
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #2a2a3f;
+}
+
+.app-header__logo {
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.app-header__nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.app-header__nav button {
+  background: transparent;
+  border: none;
+  color: #a0a0b8;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.app-header__nav button:hover {
+  color: #e0e0f0;
+}
+
+.app-header__nav button:focus-visible {
+  outline: 2px solid #7a7aff;
+  outline-offset: 2px;
+}
+
+.app-header__nav button.is-active {
+  background: #6a4cef;
+  color: #fff;
+}
