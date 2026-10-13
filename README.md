@@ -78,7 +78,7 @@ Home page ── title mode ─────────────────�
 
 `npm test` — 67 tests across components, hooks, pages, services and the API handler (React Testing Library queries by role/label, so they double as accessibility checks). Highlights: AI failure → fallback, stale-response race, unverifiable titles dropped, malformed model JSON, rate limiting, favourite-button accessible name.
 
-Coverage (from `npm run coverage`): **≈94 % statements / ≈88 % branches / ≈98 % functions**; every component has tests.
+Coverage (from `npm run coverage`): **≈95 % statements / ≈89 % branches / ≈98 % functions**; every component has tests.
 
 Screenshots of the passing test run and the coverage table are included in the portfolio entry.
 

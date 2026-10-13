@@ -16,7 +16,7 @@ The README covers one-command setup (`npm install` then `npm run dev`), the arch
 
 ## 4. Testing evidence
 - 67 passing tests (Vitest + React Testing Library) covering components, the favourites hook, pages, the OMDb and AI services, and the API handler
-- About 94.5 % statement coverage; every component is tested
+- About 94.9 % statement coverage (88.9 % branches, 98.1 % functions); every component is tested
 - Screenshots: `npm test` output, `npm run coverage` table
 
 ## 5. Performance and accessibility audit
@@ -41,8 +41,6 @@ Screenshots: Lighthouse scores (with the "Emulated Moto G Power" footer), WAVE t
 - **Monitoring:** Vercel function logs and the Google AI Studio usage page.
 
 ## 7. Reflection
-
-*This is a draft built from what actually happened while I built the project. Change any part that does not match your own experience.*
 
 **What was hardest, and why?**
 Getting the AI feature working for free and in production, not writing the code. I first built it for the Claude API, but it needs paid credit and I did not want to spend money on a capstone, so I switched to Google's free Gemini tier. That was a small change because I had kept the AI call in one function. Then the feature timed out after 15 seconds, and I only found the cause by listing the models my key could actually use and timing one directly (1.2 seconds with a lighter model). Deployment was also harder than expected: GitHub rate-limited Vercel's first build, and I had to push a new commit before the site went live.

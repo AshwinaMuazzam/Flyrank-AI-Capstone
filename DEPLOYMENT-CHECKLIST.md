@@ -23,13 +23,13 @@
 - [x] AI failure path → fallback notice + title results shown. Verified in local dev for two real failures: missing key ("AI suggestions are not configured on this server. Showing title matches instead.") and timeout ("The AI service took too long to respond. Showing title matches instead."). Same code runs in production.
 - [x] Favourite a movie, reload, it is still there (favourites counter persisted on the live site)
 - [x] Works on a phone-width viewport (Lighthouse mobile emulation, Moto G Power, slow 4G)
-- [x] Keyboard-only navigation works (press Tab through the live page: toggle, search box, Search button, Add to favourites, nav)
+- [x] Keyboard-only navigation works (Tab reaches the nav, mode toggle, search box, Search button and every Add to favourites button, each with a visible focus outline)
 - [x] Browser console has no errors (DevTools Console: "No errors", "No issues")
 
 ## Quality gates
 - [x] Lighthouse (mobile) ≥ 90 target / ≥ 85 minimum — scores: **100 / 100 / 100 / 100** (Performance / Accessibility / Best Practices / SEO)
 - [x] axe or WAVE: 0 WCAG AA violations — result: **WAVE: 0 errors, 0 contrast errors, 0 alerts** (home page and after an AI search)
-- [x] Test coverage ≥ 50 % of components — result: **94.5 % statements, every component tested**
+- [x] Test coverage ≥ 50 % of components — result: **94.9 % statements, every component tested**
 
 ## Rollback plan
 1. Vercel → Deployments → pick last known-good → **Promote to Production** (≈ seconds).
