@@ -5,10 +5,10 @@
 **Release:** `ba0f05a` (production, `main`) · **Date:** 2026-10-13 · **Deployed by:** Ashwina Muazzam · **URL:** https://flyrank-ai-capstone-one.vercel.app/
 
 ## Before deploying
-- [ ] `npm install && npm run lint && npm test && npm run build` all pass locally (tests: 67 passing; production build also succeeded on Vercel)
+- [x] `npm install && npm run lint && npm test && npm run build` all pass locally (lint clean, 67 tests passing, build succeeded: JS 62.8 kB gzipped)
 - [x] `movie-search-app` branch merged into `main` (PR #1, Conventional Commit messages)
 - [x] `.env` is not committed (`git check-ignore -v .env` confirms it is ignored by `.gitignore` line 27; `git status` never listed it)
-- [ ] No API keys in the repo history (PowerShell: `git log -p | Select-String -Pattern "apikey=|AIza|sk-ant"` prints nothing)
+- [x] No API keys in the repo history (searched with `git log -p | Select-String`; the only matches were code that reads the key from a variable, `apikey=${API_KEY}`, and no real key)
 - [x] OMDb key is activated (email link clicked; title search works)
 - [x] Gemini key created at aistudio.google.com/apikey (free tier — no billing attached)
 

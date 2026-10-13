@@ -88,7 +88,7 @@ Both audits were run on the live deployment.
 
 | Check | Result |
 |---|---|
-| Lighthouse (Edge DevTools) — Performance / Accessibility / Best Practices / SEO | **100 / 100 / 100 / 100** (FCP 1.5 s, LCP 1.5 s, TBT 0 ms, CLS 0) |
+| Lighthouse (Edge DevTools, mobile: emulated Moto G Power, slow 4G) — Performance / Accessibility / Best Practices / SEO | **100 / 100 / 100 / 100** (FCP 1.5 s, LCP 1.5 s, TBT 0 ms, CLS 0) |
 | WAVE, empty home page | **0 errors, 0 contrast errors, 0 alerts** (AIM score 10/10) |
 | WAVE, after an AI search (movie cards on screen) | **0 errors, 0 contrast errors, 0 alerts** (AIM score 10/10) |
 
