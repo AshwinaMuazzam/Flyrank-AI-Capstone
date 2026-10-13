@@ -23,7 +23,7 @@
 - [x] AI failure path → fallback notice + title results shown. Verified in local dev for two real failures: missing key ("AI suggestions are not configured on this server. Showing title matches instead.") and timeout ("The AI service took too long to respond. Showing title matches instead."). Same code runs in production.
 - [x] Favourite a movie, reload, it is still there (favourites counter persisted on the live site)
 - [x] Works on a phone-width viewport (Lighthouse mobile emulation, Moto G Power, slow 4G)
-- [ ] Keyboard-only navigation works (press Tab through the live page: toggle, search box, Search button, Add to favourites, nav)
+- [x] Keyboard-only navigation works (press Tab through the live page: toggle, search box, Search button, Add to favourites, nav)
 - [x] Browser console has no errors (DevTools Console: "No errors", "No issues")
 
 ## Quality gates
