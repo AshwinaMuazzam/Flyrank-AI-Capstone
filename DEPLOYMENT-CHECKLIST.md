@@ -2,7 +2,7 @@
 
 > Copy these answers into the official FE-11 template if it differs. Tick each box only after you have actually checked it.
 
-**Release:** `<commit sha>` · **Date:** `<date>` · **Deployed by:** Ashwina Muazzam · **URL:** `<vercel url>`
+**Release:** `<commit sha>` · **Date:** `<date>` · **Deployed by:** Ashwina Muazzam · **URL:** https://flyrank-ai-capstone-one.vercel.app/
 
 ## Before deploying
 - [ ] `npm install && npm run lint && npm test && npm run build` all pass locally
@@ -26,9 +26,9 @@
 - [ ] Browser console has no errors
 
 ## Quality gates
-- [ ] Lighthouse (mobile) ≥ 90 target / ≥ 85 minimum — scores: `____`
-- [ ] axe or WAVE: 0 WCAG AA violations — result: `____`
-- [ ] Test coverage ≥ 50 % of components — result: `____`
+- [ ] Lighthouse (mobile) ≥ 90 target / ≥ 85 minimum — scores: **100 / 100 / 100 / 100** (Performance / Accessibility / Best Practices / SEO)
+- [ ] axe or WAVE: 0 WCAG AA violations — result: **WAVE: 0 errors, 0 contrast errors, 0 alerts** (home page and after an AI search)
+- [ ] Test coverage ≥ 50 % of components — result: **94.5 % statements, every component tested**
 
 ## Rollback plan
 1. Vercel → Deployments → pick last known-good → **Promote to Production** (≈ seconds).

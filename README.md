@@ -1,6 +1,6 @@
 # 🎬 MovieFinder — AI-powered movie search
 
-**Live app:** `<ADD YOUR VERCEL URL>` · **Repo:** https://github.com/AshwinaMuazzam/Flyrank-AI-Capstone
+**Live app:** https://flyrank-ai-capstone-one.vercel.app/ · **Repo:** https://github.com/AshwinaMuazzam/Flyrank-AI-Capstone
 
 MovieFinder is a small React app for people who know the *feeling* they want from a movie but not the title. Search by title as usual, or switch to **Describe what you want** ("a slow-burn sci-fi like Arrival, but less sad") and an LLM (Google Gemini) suggests titles that are then verified against a real movie database before you see them. Favourites are saved in your browser.
 
@@ -76,25 +76,29 @@ Home page ── title mode ─────────────────�
 
 ## Testing
 
-`npm test` — 63 tests across components, hooks, pages, services and the API handler (React Testing Library queries by role/label, so they double as accessibility checks). Highlights: AI failure → fallback, stale-response race, unverifiable titles dropped, malformed model JSON, rate limiting, favourite-button accessible name.
+`npm test` — 67 tests across components, hooks, pages, services and the API handler (React Testing Library queries by role/label, so they double as accessibility checks). Highlights: AI failure → fallback, stale-response race, unverifiable titles dropped, malformed model JSON, rate limiting, favourite-button accessible name.
 
 Coverage (from `npm run coverage`): **≈94 % statements / ≈88 % branches / ≈98 % functions**; every component has tests.
 
-> Add your own screenshot of the terminal output / `coverage/index.html` to the portfolio entry.
+Screenshots of the passing test run and the coverage table are included in the portfolio entry.
 
 ## Performance & accessibility audit
 
-Fill these in after deploying (Lighthouse in Chrome DevTools → mobile; axe DevTools or WAVE):
+Both audits were run on the live deployment.
 
 | Check | Result |
 |---|---|
-| Lighthouse mobile — Performance / Accessibility / Best Practices / SEO | `__ / __ / __ / __` |
-| axe / WAVE violations | `__` |
+| Lighthouse (Edge DevTools) — Performance / Accessibility / Best Practices / SEO | **100 / 100 / 100 / 100** (FCP 1.5 s, LCP 1.5 s, TBT 0 ms, CLS 0) |
+| WAVE, empty home page | **0 errors, 0 contrast errors, 0 alerts** (AIM score 10/10) |
+| WAVE, after an AI search (movie cards on screen) | **0 errors, 0 contrast errors, 0 alerts** (AIM score 10/10) |
+
+Lighthouse still lists one diagnostic ("Reduce unused JavaScript", est. 26 KiB), which is React's framework code. It does not affect the score.
 
 **Improvements made from audit-style review**
 1. **Contrast:** white text on `#7a5cff` is 4.37:1 (fails WCAG AA 4.5:1 for normal text). Primary buttons now use `#6a4cef` (≈5.4:1).
 2. **Label in Name (WCAG 2.5.3):** favourite buttons had visible text "Add to favourites" but an `aria-label` that didn't contain it. Now the visible text is the name, with the movie title appended for screen readers only.
-3. Heading outline fixed (one `<h1>` per view, card titles `<h2>`), `aria-current` on navigation, status messages in live regions, `<main>`/`<nav aria-label>` landmarks, descriptive page `<title>` and meta description.
+3. **Found on the live site:** one AI suggestion showed a wrong entry ("Ex Machina (2014)/Crash (2004) - 74 Movie Buff Specialists (Ep 27)"). OMDb's title lookup returns its best guess, which can be a different work, so "it exists" was not a strong enough check. The app now only accepts a result whose title matches the suggested title (or adds a subtitle after a colon), with tests for it.
+4. Heading outline fixed (one `<h1>` per view, card titles `<h2>`), `aria-current` on navigation, status messages in live regions, `<main>`/`<nav aria-label>` landmarks, descriptive page `<title>` and meta description.
 
 ## Deployment & rollback
 
