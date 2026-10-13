@@ -1,34 +1,35 @@
 # Deployment checklist — MovieFinder
 
-> Copy these answers into the official FE-11 template if it differs. Tick each box only after you have actually checked it.
+> Copy these answers into the official FE-11 template if it differs. Boxes are ticked only for checks that were actually done; the notes say how.
 
-**Release:** `<commit sha>` · **Date:** `<date>` · **Deployed by:** Ashwina Muazzam · **URL:** https://flyrank-ai-capstone-one.vercel.app/
+**Release:** `ba0f05a` (production, `main`) · **Date:** 2026-10-13 · **Deployed by:** Ashwina Muazzam · **URL:** https://flyrank-ai-capstone-one.vercel.app/
 
 ## Before deploying
-- [ ] `npm install && npm run lint && npm test && npm run build` all pass locally
-- [ ] `movie-search-app` branch merged into `main` (PR reviewed, Conventional Commit messages)
-- [ ] `.env` is not committed (`git ls-files | grep .env` shows only `.env.example`)
-- [ ] No API keys in the repo history (`git log -p | grep -i "apikey="` is empty)
-- [ ] OMDb key is activated (email link clicked)
-- [ ] Gemini key created at aistudio.google.com/apikey (free tier — no billing attached)
+- [ ] `npm install && npm run lint && npm test && npm run build` all pass locally (tests: 67 passing; production build also succeeded on Vercel)
+- [x] `movie-search-app` branch merged into `main` (PR #1, Conventional Commit messages)
+- [x] `.env` is not committed (`git check-ignore -v .env` confirms it is ignored by `.gitignore` line 27; `git status` never listed it)
+- [ ] No API keys in the repo history (PowerShell: `git log -p | Select-String -Pattern "apikey=|AIza|sk-ant"` prints nothing)
+- [x] OMDb key is activated (email link clicked; title search works)
+- [x] Gemini key created at aistudio.google.com/apikey (free tier — no billing attached)
 
 ## Vercel configuration
-- [ ] Framework preset: Vite · Build: `npm run build` · Output: `dist`
-- [ ] Env vars set for **Production**: `VITE_OMDB_API_KEY`, `GEMINI_API_KEY`
-- [ ] Redeployed *after* adding env vars (Vite bakes `VITE_*` in at build time)
+- [x] Framework preset: Vite · Build: `npm run build` · Output: `dist`
+- [x] Env vars set for **Production**: `VITE_OMDB_API_KEY`, `GEMINI_API_KEY`
+- [x] Redeployed *after* adding env vars (Vite bakes `VITE_*` in at build time; live site search works)
 
 ## After deploying — smoke test on the live URL
-- [ ] Title search returns results (e.g. "Inception")
-- [ ] AI mode returns suggestions with reasons (e.g. "a slow-burn sci-fi like Arrival")
-- [ ] AI failure path: temporarily blank `GEMINI_API_KEY` (or block `/api/recommend` in DevTools) → fallback notice + title results shown
-- [ ] Favourite a movie, reload, it is still there
-- [ ] Works on a phone-width viewport; keyboard-only navigation works
-- [ ] Browser console has no errors
+- [x] Title search returns results (e.g. "Inception")
+- [x] AI mode returns suggestions with reasons (e.g. "a slow-burn sci-fi like Arrival")
+- [x] AI failure path → fallback notice + title results shown. Verified in local dev for two real failures: missing key ("AI suggestions are not configured on this server. Showing title matches instead.") and timeout ("The AI service took too long to respond. Showing title matches instead."). Same code runs in production.
+- [x] Favourite a movie, reload, it is still there (favourites counter persisted on the live site)
+- [x] Works on a phone-width viewport (Lighthouse mobile emulation, Moto G Power, slow 4G)
+- [ ] Keyboard-only navigation works (press Tab through the live page: toggle, search box, Search button, Add to favourites, nav)
+- [x] Browser console has no errors (DevTools Console: "No errors", "No issues")
 
 ## Quality gates
-- [ ] Lighthouse (mobile) ≥ 90 target / ≥ 85 minimum — scores: **100 / 100 / 100 / 100** (Performance / Accessibility / Best Practices / SEO)
-- [ ] axe or WAVE: 0 WCAG AA violations — result: **WAVE: 0 errors, 0 contrast errors, 0 alerts** (home page and after an AI search)
-- [ ] Test coverage ≥ 50 % of components — result: **94.5 % statements, every component tested**
+- [x] Lighthouse (mobile) ≥ 90 target / ≥ 85 minimum — scores: **100 / 100 / 100 / 100** (Performance / Accessibility / Best Practices / SEO)
+- [x] axe or WAVE: 0 WCAG AA violations — result: **WAVE: 0 errors, 0 contrast errors, 0 alerts** (home page and after an AI search)
+- [x] Test coverage ≥ 50 % of components — result: **94.5 % statements, every component tested**
 
 ## Rollback plan
 1. Vercel → Deployments → pick last known-good → **Promote to Production** (≈ seconds).
@@ -39,4 +40,4 @@
 - Vercel → Logs for `/api/recommend` (watch 502/429 rates)
 - Google AI Studio usage page (watch for free-tier quota errors)
 
-**Sign-off:** `____________` Date: `________`
+**Sign-off:** Ashwina Muazzam · Date: 2026-10-13
